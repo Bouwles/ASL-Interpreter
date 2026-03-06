@@ -22,8 +22,8 @@ ___
 **Run locally**
 
 **Clone the repo:**
-git clone https://github.com/Bouwles/basic-3d-hand-tracking.git
-cd basic-3d-hand-tracking
+git clone https://github.com/Bouwles/ASL-Interpreter.git
+cd asl-interpreter
 
 **Open the file**
 Since its an HTML file, it should open in your browser just by double clicking on the file.
