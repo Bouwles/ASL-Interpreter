@@ -8,146 +8,261 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #000; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; height: 100vh; width: 100vw; }
 
-#video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); z-index: 0; }
+#video  { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); z-index: 0; }
 #canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); z-index: 1; pointer-events: none; }
 
+/* Sign Label */
 #sign-display {
-  position: fixed;
-  top: 50%;
-  left: 50%;
+  position: fixed; top: 42%; left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 10;
-  text-align: center;
-  pointer-events: none;
+  z-index: 10; text-align: center; pointer-events: none;
 }
 #sign-label {
   font-size: clamp(3.5rem, 11vw, 8rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 700; letter-spacing: -0.02em;
   text-shadow: 0 0 40px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.9);
-  color: #fff;
-  line-height: 1;
-  transition: opacity 0.15s;
-  opacity: 0;
+  color: #fff; line-height: 1; transition: opacity 0.15s; opacity: 0;
 }
 #confidence-bar-wrap {
-  margin-top: 12px;
-  width: 200px;
-  height: 4px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 12px auto 0; width: 200px; height: 4px;
+  background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden;
 }
 #confidence-bar {
-  height: 100%;
-  width: 0%;
+  height: 100%; width: 0%;
   background: linear-gradient(90deg, #4af, #8ff);
-  border-radius: 2px;
-  transition: width 0.05s linear;
+  border-radius: 2px; transition: width 0.05s linear;
+}
+#hold-ring {
+  margin-top: 8px; font-size: 0.7rem;
+  color: rgba(255,255,255,0.38); letter-spacing: 0.06em; min-height: 1em;
 }
 
+/* Bottom Container */
+#bottom-container {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+  background: linear-gradient(transparent, rgba(0,0,0,0.92) 20%);
+}
+
+/* Sentence Panel */
+#sentence-panel { padding: 16px 24px 10px; }
+#sp-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+}
+#sp-label {
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 0.13em; color: rgba(255,255,255,0.3);
+}
+#sp-controls { display: flex; gap: 6px; }
+.sp-btn {
+  padding: 4px 10px; background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.78);
+  border-radius: 5px; cursor: pointer; font-size: 0.7rem; transition: background 0.15s;
+}
+.sp-btn:hover { background: rgba(255,255,255,0.18); }
+.sp-btn.accent { background: rgba(70,150,255,0.18); border-color: rgba(70,150,255,0.38); color: #7cf; }
+.sp-btn.accent:hover { background: rgba(70,150,255,0.3); }
+
+#sentence-text {
+  font-size: clamp(1.25rem, 3.2vw, 2.1rem); font-weight: 600;
+  color: rgba(255,255,255,0.4); line-height: 1.25; min-height: 1.4em;
+  transition: color 0.3s; font-style: italic;
+}
+#sentence-text.has-sentence { color: #fff; font-style: normal; }
+#sentence-text.pop { animation: sentPop 0.22s ease; }
+@keyframes sentPop { from { transform: scale(0.97); opacity: 0.6; } to { transform: scale(1); opacity: 1; } }
+
+#intent-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 5px; min-height: 20px;
+}
+#intent-label {
+  font-size: 0.7rem; color: rgba(255,255,255,0.42);
+  background: rgba(255,255,255,0.07); border-radius: 4px; padding: 2px 7px;
+}
+#intent-confidence { font-size: 0.68rem; color: rgba(100,200,255,0.55); }
+#pause-indicator { font-size: 0.63rem; color: rgba(255,200,80,0.55); margin-left: auto; }
+
+#raw-signs-row {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 5px; flex-wrap: wrap; min-height: 22px;
+}
+#raw-signs-row.hidden { display: none; }
+#raw-label { font-size: 0.62rem; color: rgba(255,255,255,0.22); flex-shrink: 0; }
+#raw-signs-pills { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
+.raw-pill {
+  font-size: 0.68rem; padding: 2px 6px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 3px; color: rgba(255,255,255,0.42);
+  animation: fadeIn 0.15s ease;
+}
+
+/* History Bar */
 #history-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  padding: 14px 24px 18px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.75));
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 60px;
-  overflow-x: auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 24px 20px; border-top: 1px solid rgba(255,255,255,0.06);
+  min-height: 52px; overflow-x: auto;
 }
 .history-word {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.85);
-  padding: 3px 8px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 4px;
+  font-size: 1rem; font-weight: 500; color: rgba(255,255,255,0.68);
+  padding: 3px 8px; background: rgba(255,255,255,0.08);
+  border-radius: 4px; white-space: nowrap; flex-shrink: 0;
   animation: fadeIn 0.2s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
 #clear-btn {
-  margin-left: auto;
-  padding: 5px 12px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  flex-shrink: 0;
+  margin-left: auto; padding: 4px 10px;
+  background: rgba(255,60,60,0.13); border: 1px solid rgba(255,60,60,0.22);
+  color: rgba(255,140,140,0.8); border-radius: 5px; cursor: pointer;
+  font-size: 0.7rem; flex-shrink: 0;
 }
-#clear-btn:hover { background: rgba(255,255,255,0.22); }
+#clear-btn:hover { background: rgba(255,60,60,0.25); }
 
-#ref-toggle {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 20;
-  padding: 8px 16px;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #fff;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  backdrop-filter: blur(8px);
-}
-#ref-toggle:hover { background: rgba(0,0,0,0.7); }
-
+/* Status */
 #status {
-  position: fixed;
-  top: 16px;
-  left: 16px;
-  z-index: 20;
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.5);
-  padding: 6px 12px;
-  background: rgba(0,0,0,0.4);
-  border-radius: 6px;
-  backdrop-filter: blur(8px);
+  position: fixed; top: 16px; left: 16px; z-index: 20;
+  font-size: 0.78rem; color: rgba(255,255,255,0.45);
+  padding: 6px 12px; background: rgba(0,0,0,0.45);
+  border-radius: 6px; backdrop-filter: blur(8px);
 }
 
+/* Top Controls */
+#top-controls {
+  position: fixed; top: 16px; right: 16px;
+  z-index: 20; display: flex; gap: 6px; align-items: center;
+}
+.top-btn {
+  padding: 7px 13px; background: rgba(0,0,0,0.52);
+  border: 1px solid rgba(255,255,255,0.17); color: rgba(255,255,255,0.82);
+  border-radius: 8px; cursor: pointer; font-size: 0.78rem;
+  backdrop-filter: blur(8px); transition: background 0.15s; white-space: nowrap;
+}
+.top-btn:hover { background: rgba(0,0,0,0.72); }
+.top-btn.active { background: rgba(70,150,255,0.22); border-color: rgba(70,150,255,0.45); color: #7cf; }
+
+/* Debug Overlay */
+#debug-overlay {
+  position: fixed; top: 60px; left: 16px; z-index: 20;
+  background: rgba(0,0,0,0.62); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 10px 14px; font-size: 0.7rem;
+  color: rgba(255,255,255,0.5); backdrop-filter: blur(8px);
+  min-width: 170px; display: none; line-height: 1.75; pointer-events: none;
+}
+#debug-overlay.visible { display: block; }
+.dbl { color: rgba(100,200,255,0.8); }
+
+/* Transcript Panel */
+#transcript-panel {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 340px;
+  background: rgba(8,8,14,0.96); backdrop-filter: blur(16px);
+  z-index: 15; display: flex; flex-direction: column;
+  transform: translateX(-100%); transition: transform 0.25s ease;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+#transcript-panel.open { transform: translateX(0); }
+#tp-header {
+  padding: 56px 20px 12px; border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
+}
+#tp-header h2 {
+  font-size: 0.95rem; font-weight: 600; color: rgba(255,255,255,0.65);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
+}
+#tp-btns { display: flex; gap: 6px; }
+.t-btn {
+  padding: 5px 10px; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.6);
+  border-radius: 5px; cursor: pointer; font-size: 0.7rem;
+}
+.t-btn:hover { background: rgba(255,255,255,0.14); }
+#transcript-list { flex: 1; overflow-y: auto; padding: 14px 20px; }
+.transcript-item {
+  display: flex; gap: 10px; padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  animation: fadeIn 0.2s ease;
+}
+.t-num     { color: rgba(255,255,255,0.2); font-size: 0.7rem; min-width: 18px; padding-top: 2px; }
+.t-sentence { color: rgba(255,255,255,0.85); font-size: 0.86rem; flex: 1; line-height: 1.4; }
+.t-time    { color: rgba(255,255,255,0.18); font-size: 0.62rem; white-space: nowrap; padding-top: 3px; }
+.t-empty   { color: rgba(255,255,255,0.22); font-size: 0.78rem; text-align: center; margin-top: 24px; }
+
+/* Reference Panel */
 #ref-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 360px;
-  background: rgba(10,10,15,0.93);
-  backdrop-filter: blur(16px);
-  z-index: 15;
-  overflow-y: auto;
-  padding: 60px 20px 20px;
-  transform: translateX(100%);
-  transition: transform 0.25s ease;
-  border-left: 1px solid rgba(255,255,255,0.08);
+  position: fixed; top: 0; right: 0; bottom: 0; width: 380px;
+  background: rgba(8,8,14,0.96); backdrop-filter: blur(16px);
+  z-index: 15; overflow-y: auto; padding: 56px 20px 24px;
+  transform: translateX(100%); transition: transform 0.25s ease;
+  border-left: 1px solid rgba(255,255,255,0.07);
 }
 #ref-panel.open { transform: translateX(0); }
-#ref-panel h2 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.1em; }
-#ref-panel .subtitle { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-bottom: 16px; line-height: 1.4; }
-#ref-panel .made-by { font-size: 0.68rem; color: rgba(255,255,255,0.25); margin-top: 24px; text-align: center; }
-.ref-section { margin-bottom: 20px; }
-.ref-section h3 { font-size: 0.72rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
-.ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; }
-.ref-item {
-  background: rgba(255,255,255,0.06);
-  border-radius: 6px;
-  padding: 6px 8px;
-  text-align: center;
-  color: rgba(255,255,255,0.75);
+#ref-panel h2 {
+  font-size: 0.95rem; font-weight: 600; margin-bottom: 4px;
+  color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.1em;
 }
-.ref-item .sign-key { font-weight: 700; font-size: 0.88rem; color: #fff; display: block; margin-bottom: 2px; }
-.ref-item .sign-hint { font-size: 0.58rem; color: rgba(255,255,255,0.4); line-height: 1.3; }
+#ref-panel .subtitle { font-size: 0.7rem; color: rgba(255,255,255,0.32); margin-bottom: 16px; line-height: 1.4; }
+#ref-panel .made-by  { font-size: 0.65rem; color: rgba(255,255,255,0.18); margin-top: 28px; text-align: center; }
+.ref-section { margin-bottom: 20px; }
+.ref-section h3 {
+  font-size: 0.68rem; color: rgba(255,255,255,0.35);
+  text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;
+}
+.ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px,1fr)); gap: 6px; }
+.ref-item  { background: rgba(255,255,255,0.05); border-radius: 6px; padding: 6px 8px; text-align: center; }
+.ref-item .sign-key  { font-weight: 700; font-size: 0.84rem; color: #fff; display: block; margin-bottom: 2px; }
+.ref-item .sign-hint { font-size: 0.55rem; color: rgba(255,255,255,0.35); line-height: 1.3; }
+
+/* Custom Phrases */
+#custom-phrase-list { margin-bottom: 8px; }
+.cp-item {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 8px; background: rgba(255,255,255,0.05);
+  border-radius: 5px; margin-bottom: 4px; font-size: 0.7rem;
+}
+.cp-signs    { color: rgba(100,200,255,0.72); flex-shrink: 0; }
+.cp-arrow    { color: rgba(255,255,255,0.22); flex-shrink: 0; }
+.cp-sentence { color: rgba(255,255,255,0.62); flex: 1; }
+.cp-del {
+  background: rgba(255,60,60,0.14); border: none;
+  color: rgba(255,120,120,0.7); border-radius: 3px;
+  cursor: pointer; padding: 1px 5px; font-size: 0.72rem; flex-shrink: 0;
+}
+.cp-del:hover { background: rgba(255,60,60,0.3); }
+.cp-form { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+.cp-input {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 5px; padding: 6px 10px; color: #fff; font-size: 0.72rem; outline: none;
+}
+.cp-input:focus { border-color: rgba(70,150,255,0.4); }
+.cp-input::placeholder { color: rgba(255,255,255,0.28); }
+#add-phrase-btn {
+  padding: 6px; background: rgba(70,150,255,0.18);
+  border: 1px solid rgba(70,150,255,0.32); color: #7cf;
+  border-radius: 5px; cursor: pointer; font-size: 0.72rem;
+}
+#add-phrase-btn:hover { background: rgba(70,150,255,0.3); }
+
+/* LLM Section */
+.llm-row { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+.llm-input {
+  flex: 1; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.13); border-radius: 5px;
+  padding: 5px 8px; color: #fff; font-size: 0.68rem; outline: none;
+}
+.llm-input:focus { border-color: rgba(70,150,255,0.4); }
+#llm-toggle-btn {
+  padding: 5px 10px; background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.65);
+  border-radius: 5px; cursor: pointer; font-size: 0.7rem; white-space: nowrap;
+}
+#llm-toggle-btn.on { background: rgba(70,150,255,0.2); border-color: rgba(70,150,255,0.4); color: #7cf; }
+#llm-status { font-size: 0.63rem; color: rgba(255,255,255,0.28); margin-top: 4px; }
+
+/* Toast */
+#toast {
+  position: fixed; bottom: 210px; left: 50%; transform: translateX(-50%);
+  background: rgba(50,130,255,0.88); color: #fff; padding: 8px 18px;
+  border-radius: 20px; font-size: 0.8rem; font-weight: 500;
+  z-index: 30; opacity: 0; transition: opacity 0.3s;
+  pointer-events: none; backdrop-filter: blur(8px); white-space: nowrap;
+}
 </style>
 </head>
 <body>
@@ -157,23 +272,73 @@ body { background: #000; color: #fff; font-family: 'Segoe UI', system-ui, sans-s
 
 <div id="sign-display">
   <div id="sign-label"></div>
-  <div id="confidence-bar-wrap">
-    <div id="confidence-bar"></div>
+  <div id="confidence-bar-wrap"><div id="confidence-bar"></div></div>
+  <div id="hold-ring"></div>
+</div>
+
+<div id="bottom-container">
+  <div id="sentence-panel">
+    <div id="sp-header">
+      <span id="sp-label">Current Sentence</span>
+      <div id="sp-controls">
+        <button class="sp-btn" id="undo-btn">Undo</button>
+        <button class="sp-btn accent" id="copy-btn">Copy</button>
+        <button class="sp-btn" id="finalize-btn">Finalize &uarr;</button>
+        <button class="sp-btn" id="clear-sentence-btn">Clear</button>
+      </div>
+    </div>
+    <div id="sentence-text">Waiting for signs&hellip;</div>
+    <div id="intent-row">
+      <span id="intent-label"></span>
+      <span id="intent-confidence"></span>
+      <span id="pause-indicator"></span>
+    </div>
+    <div id="raw-signs-row">
+      <span id="raw-label">RAW</span>
+      <div id="raw-signs-pills"></div>
+      <button class="sp-btn" id="toggle-raw-btn" style="margin-left:auto;font-size:0.62rem;padding:2px 7px">Hide</button>
+    </div>
+  </div>
+  <div id="history-bar">
+    <button id="clear-btn">Clear All</button>
   </div>
 </div>
 
-<div id="history-bar">
-  <button id="clear-btn">Clear</button>
+<div id="status">Initializing&hellip;</div>
+
+<div id="top-controls">
+  <button class="top-btn" id="debug-toggle">Debug</button>
+  <button class="top-btn" id="smart-mode-btn">AI &#9675;</button>
+  <button class="top-btn" id="transcript-toggle">Transcript</button>
+  <button class="top-btn" id="ref-toggle">Reference</button>
 </div>
 
-<div id="status">Initializing...</div>
-<button id="ref-toggle">Reference</button>
+<div id="debug-overlay">
+  <div>Raw: <span class="dbl" id="dbg-raw">&mdash;</span></div>
+  <div>Stable: <span class="dbl" id="dbg-stable">&mdash;</span></div>
+  <div>Hold: <span class="dbl" id="dbg-hold">0%</span></div>
+  <div>Votes: <span class="dbl" id="dbg-vote">0/10</span></div>
+  <div>Cooldown: <span class="dbl" id="dbg-cd">ready</span></div>
+  <div>Buffer: <span class="dbl" id="dbg-buf">0 words</span></div>
+  <div>Intent: <span class="dbl" id="dbg-intent">&mdash;</span></div>
+</div>
+
+<div id="transcript-panel">
+  <div id="tp-header">
+    <h2>Transcript</h2>
+    <div id="tp-btns">
+      <button class="t-btn" id="copy-transcript-btn">Copy All</button>
+      <button class="t-btn" id="clear-transcript-btn">Clear</button>
+    </div>
+  </div>
+  <div id="transcript-list"></div>
+</div>
 
 <div id="ref-panel">
   <h2>Supported Signs</h2>
-  <p class="subtitle">Hold each sign steady for ~0.6s to register it.</p>
+  <p class="subtitle">Hold each sign steady ~0.65 s to register.</p>
   <div class="ref-section">
-    <h3>Numbers 0 – 9</h3>
+    <h3>Numbers 0 &ndash; 9</h3>
     <div class="ref-grid" id="ref-numbers"></div>
   </div>
   <div class="ref-section">
@@ -188,8 +353,31 @@ body { background: #000; color: #fff; font-family: 'Segoe UI', system-ui, sans-s
     <h3>People &amp; Phrases</h3>
     <div class="ref-grid" id="ref-people"></div>
   </div>
+
+  <div class="ref-section">
+    <h3>Custom Phrases</h3>
+    <div id="custom-phrase-list"></div>
+    <div class="cp-form">
+      <input class="cp-input" id="cp-signs-input" placeholder="Signs: WANT, WATER  (comma-separated)">
+      <input class="cp-input" id="cp-sentence-input" placeholder="Output sentence">
+      <button id="add-phrase-btn">+ Add Custom Phrase</button>
+    </div>
+  </div>
+
+  <div class="ref-section" id="llm-section">
+    <h3>AI Mode (Local LLM)</h3>
+    <div class="llm-row">
+      <input class="llm-input" id="llm-endpoint-input" value="http://localhost:11434/api/generate">
+      <button id="llm-toggle-btn">Off</button>
+    </div>
+    <input class="llm-input" id="llm-model-input" placeholder="Model name" value="llama3" style="width:100%;margin-top:4px">
+    <p id="llm-status">Disabled &ndash; rule-based interpretation active</p>
+  </div>
+
   <p class="made-by">Made by Paul Nercessian</p>
 </div>
+
+<div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
@@ -199,373 +387,701 @@ body { background: #000; color: #fff; font-family: 'Segoe UI', system-ui, sans-s
 (function () {
 'use strict';
 
-var video    = document.getElementById('video');
-var canvas   = document.getElementById('canvas');
-var ctx      = canvas.getContext('2d');
-var signLabel     = document.getElementById('sign-label');
-var confidenceBar = document.getElementById('confidence-bar');
-var historyBar    = document.getElementById('history-bar');
-var clearBtn      = document.getElementById('clear-btn');
-var statusEl      = document.getElementById('status');
-var refToggle     = document.getElementById('ref-toggle');
-var refPanel      = document.getElementById('ref-panel');
+/* DOM */
+var video          = document.getElementById('video');
+var canvas         = document.getElementById('canvas');
+var ctx            = canvas.getContext('2d');
+var signLabel      = document.getElementById('sign-label');
+var confidenceBar  = document.getElementById('confidence-bar');
+var holdRing       = document.getElementById('hold-ring');
+var historyBar     = document.getElementById('history-bar');
+var clearBtn       = document.getElementById('clear-btn');
+var statusEl       = document.getElementById('status');
+var refPanel       = document.getElementById('ref-panel');
+var transcriptPanel= document.getElementById('transcript-panel');
+var transcriptList = document.getElementById('transcript-list');
+var debugOverlay   = document.getElementById('debug-overlay');
+var sentenceText   = document.getElementById('sentence-text');
+var intentLabel    = document.getElementById('intent-label');
+var intentConf     = document.getElementById('intent-confidence');
+var pauseIndicator = document.getElementById('pause-indicator');
+var rawSignsPills  = document.getElementById('raw-signs-pills');
+var rawSignsRow    = document.getElementById('raw-signs-row');
+var dbgRaw    = document.getElementById('dbg-raw');
+var dbgStable = document.getElementById('dbg-stable');
+var dbgHold   = document.getElementById('dbg-hold');
+var dbgVote   = document.getElementById('dbg-vote');
+var dbgCd     = document.getElementById('dbg-cd');
+var dbgBuf    = document.getElementById('dbg-buf');
+var dbgIntent = document.getElementById('dbg-intent');
 
+/* Sign metadata */
 var SIGN_HINTS = {
-  '0':'all fingers form O shape',
-  '1':'index points straight up',
-  '2':'index+middle spread apart (V)',
-  '3':'thumb+index+middle up',
-  '4':'four fingers up, palm forward',
-  '5':'all five spread, palm forward',
-  '6':'thumb+pinky touch, 3 up',
-  '7':'thumb+ring touch, others up',
-  '8':'thumb+middle touch, palm fwd',
-  '9':'index+thumb loop, others down',
-  'YES':'closed fist, palm forward',
-  'NO':'index+middle together, palm fwd',
-  'GOOD':'all five fingers, palm down',
-  'SORRY':'closed fist, palm toward you',
-  'THANK YOU':'4 fingers, palm down forward',
-  'PLEASE':'4 fingers, palm toward body',
-  'HELLO':'all five spread wide, palm fwd',
-  'HELP':'thumb only up (thumbs up)',
-  'STOP':'4 fingers, palm sideways',
-  'WANT':'4 fingers, palm facing up',
-  'MORE':'all fingertips pinched together',
-  'EAT':'all tips pinched to thumb, palm in',
-  'THINK':'index up, palm facing sideways',
-  'KNOW':'index+middle up, palm toward face',
-  'LIKE':'thumb+middle pinch, 3 fingers up, palm in',
-  'NEED':'index pointing downward',
-  'YOU':'index pointing forward at camera',
-  'WATER':'index+middle+ring spread (W shape)',
-  'MOTHER':'all five open, palm sideways',
-  'FRIEND':'index hooked, others curled',
+  '0':'all fingers form O shape','1':'index points straight up',
+  '2':'index+middle spread (V)','3':'thumb+index+middle up',
+  '4':'four fingers up, palm fwd','5':'all five spread, palm fwd',
+  '6':'thumb+pinky touch, 3 up','7':'thumb+ring touch, others up',
+  '8':'thumb+middle touch, palm fwd','9':'index+thumb loop, others down',
+  'YES':'closed fist, palm forward','NO':'index+middle together, palm fwd',
+  'GOOD':'all five fingers, palm down','SORRY':'closed fist, palm toward you',
+  'THANK YOU':'4 fingers, palm down fwd','PLEASE':'4 fingers, palm toward body',
+  'HELLO':'all five spread wide, palm fwd','HELP':'thumb only up (thumbs up)',
+  'STOP':'4 fingers, palm sideways','WANT':'4 fingers, palm facing up',
+  'MORE':'all fingertips pinched together','EAT':'all tips pinched to thumb, palm in',
+  'THINK':'index up, palm facing sideways','KNOW':'index+middle up, palm toward face',
+  'LIKE':'thumb+middle pinch, 3 fingers up, palm in','NEED':'index pointing downward',
+  'YOU':'index pointing forward at camera','WATER':'index+middle+ring spread (W)',
+  'MOTHER':'all five open, palm sideways','FRIEND':'index hooked, others curled',
   'I LOVE YOU':'pinky+index+thumb out'
 };
-
-var NUMBERS  = ['0','1','2','3','4','5','6','7','8','9'];
+var NUMBERS   = ['0','1','2','3','4','5','6','7','8','9'];
 var RESPONSES = ['YES','NO','GOOD','SORRY','THANK YOU','PLEASE','HELLO'];
 var ACTIONS   = ['HELP','STOP','WANT','MORE','EAT','THINK','KNOW','LIKE','NEED','YOU'];
 var PEOPLE    = ['WATER','MOTHER','FRIEND','I LOVE YOU'];
 
 function makeItem(key) {
-  var d = document.createElement('div');
-  d.className = 'ref-item';
-  d.innerHTML = '<span class="sign-key">' + key + '</span><span class="sign-hint">' + (SIGN_HINTS[key]||'') + '</span>';
+  var d = document.createElement('div'); d.className = 'ref-item';
+  d.innerHTML = '<span class="sign-key">'+key+'</span><span class="sign-hint">'+(SIGN_HINTS[key]||'')+'</span>';
   return d;
 }
-var rN = document.getElementById('ref-numbers');
-var rR = document.getElementById('ref-responses');
-var rA = document.getElementById('ref-actions');
-var rP = document.getElementById('ref-people');
-NUMBERS.forEach(function(s){ rN.appendChild(makeItem(s)); });
-RESPONSES.forEach(function(s){ rR.appendChild(makeItem(s)); });
-ACTIONS.forEach(function(s){ rA.appendChild(makeItem(s)); });
-PEOPLE.forEach(function(s){ rP.appendChild(makeItem(s)); });
+[['ref-numbers',NUMBERS],['ref-responses',RESPONSES],['ref-actions',ACTIONS],['ref-people',PEOPLE]].forEach(function(p){
+  var el = document.getElementById(p[0]); p[1].forEach(function(s){ el.appendChild(makeItem(s)); });
+});
 
-refToggle.addEventListener('click', function(){ refPanel.classList.toggle('open'); });
-
+/* Canvas */
 function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-window.addEventListener('resize', resize);
-resize();
+window.addEventListener('resize', resize); resize();
 
-var ALPHA = 0.35;
-var smLm = null;
-
+/* Smoothing */
+var ALPHA = 0.35, smLm = null;
 function smooth(raw) {
   if (!smLm || smLm.length !== raw.length) {
-    smLm = raw.map(function(p){ return {x:p.x, y:p.y, z:p.z||0}; });
-    return smLm;
+    smLm = raw.map(function(p){ return {x:p.x,y:p.y,z:p.z||0}; }); return smLm;
   }
-  for (var i = 0; i < raw.length; i++) {
-    smLm[i].x += ALPHA * (raw[i].x - smLm[i].x);
-    smLm[i].y += ALPHA * (raw[i].y - smLm[i].y);
-    smLm[i].z += ALPHA * ((raw[i].z||0) - smLm[i].z);
+  for (var i=0;i<raw.length;i++) {
+    smLm[i].x += ALPHA*(raw[i].x-smLm[i].x);
+    smLm[i].y += ALPHA*(raw[i].y-smLm[i].y);
+    smLm[i].z += ALPHA*((raw[i].z||0)-smLm[i].z);
   }
   return smLm;
 }
 
-function d2(a, b) {
-  var dx=a.x-b.x, dy=a.y-b.y;
-  return Math.sqrt(dx*dx+dy*dy);
-}
-
-function angle3(a, b, c) {
-  var ux=a.x-b.x, uy=a.y-b.y;
-  var vx=c.x-b.x, vy=c.y-b.y;
-  var dot=ux*vx+uy*vy;
-  var ma=Math.sqrt(ux*ux+uy*uy), mb=Math.sqrt(vx*vx+vy*vy);
+/* Geometry */
+function d2(a,b){ var dx=a.x-b.x,dy=a.y-b.y; return Math.sqrt(dx*dx+dy*dy); }
+function angle3(a,b,c){
+  var ux=a.x-b.x,uy=a.y-b.y,vx=c.x-b.x,vy=c.y-b.y;
+  var dot=ux*vx+uy*vy,ma=Math.sqrt(ux*ux+uy*uy),mb=Math.sqrt(vx*vx+vy*vy);
   return Math.acos(Math.max(-1,Math.min(1,dot/(ma*mb+1e-8))))*180/Math.PI;
 }
+var LW=0,T1=1,T2=2,T3=3,T4=4,I1=5,I2=6,I3=7,I4=8;
+var M1=9,M2=10,M3=11,M4=12,R1=13,R2=14,R3=15,R4=16,P1=17,P2=18,P3=19,P4=20;
 
-var LW=0, T1=1,T2=2,T3=3,T4=4;
-var I1=5,I2=6,I3=7,I4=8;
-var M1=9,M2=10,M3=11,M4=12;
-var R1=13,R2=14,R3=15,R4=16;
-var P1=17,P2=18,P3=19,P4=20;
-
-function ext(lm) {
-  var tOut = d2(lm[T4],lm[I1]) > d2(lm[T3],lm[I1]);
+function ext(lm){
   return {
-    t: tOut,
-    i: d2(lm[I4],lm[LW]) > d2(lm[I2],lm[LW])*1.08,
-    m: d2(lm[M4],lm[LW]) > d2(lm[M2],lm[LW])*1.08,
-    r: d2(lm[R4],lm[LW]) > d2(lm[R2],lm[LW])*1.08,
-    p: d2(lm[P4],lm[LW]) > d2(lm[P2],lm[LW])*1.08
+    t: d2(lm[T4],lm[I1])>d2(lm[T3],lm[I1]),
+    i: d2(lm[I4],lm[LW])>d2(lm[I2],lm[LW])*1.08,
+    m: d2(lm[M4],lm[LW])>d2(lm[M2],lm[LW])*1.08,
+    r: d2(lm[R4],lm[LW])>d2(lm[R2],lm[LW])*1.08,
+    p: d2(lm[P4],lm[LW])>d2(lm[P2],lm[LW])*1.08
   };
 }
+function palmCrossZ(lm){ var ax=lm[I1].x-lm[LW].x,ay=lm[I1].y-lm[LW].y,bx=lm[P1].x-lm[LW].x,by=lm[P1].y-lm[LW].y; return ax*by-ay*bx; }
+function palmCrossY(lm){ var ax=lm[I1].x-lm[LW].x,az=(lm[I1].z||0)-(lm[LW].z||0),bx=lm[P1].x-lm[LW].x,bz=(lm[P1].z||0)-(lm[LW].z||0); return az*bx-ax*bz; }
+function palmCrossX(lm){ var ay=lm[I1].y-lm[LW].y,az=(lm[I1].z||0)-(lm[LW].z||0),by=lm[P1].y-lm[LW].y,bz=(lm[P1].z||0)-(lm[LW].z||0); return ay*bz-az*by; }
+function palmFwd(lm) { return palmCrossZ(lm)<0; }
+function palmDown(lm){ return palmCrossY(lm)>0; }
+function palmSide(lm){ return palmCrossX(lm)<-0.12; }
+function palmUp(lm)  { return palmCrossY(lm)<-0.04; }
+function palmIn(lm)  { var pz=palmCrossZ(lm),px=palmCrossX(lm); return pz>0.05&&Math.abs(px)<Math.abs(pz)*0.8; }
+function ti(lm){ return d2(lm[T4],lm[I4])<0.07; }
+function tm(lm){ return d2(lm[T4],lm[M4])<0.07; }
+function tr(lm){ return d2(lm[T4],lm[R4])<0.07; }
+function tp(lm){ return d2(lm[T4],lm[P4])<0.07; }
+function im(lm){ return d2(lm[I4],lm[M4])<0.058; }
+function indexHooked(lm){ var a=angle3(lm[I1],lm[I2],lm[I4]); return a<135&&a>45; }
+function gathered(lm){ var t=[lm[I4],lm[M4],lm[R4],lm[P4]],mx=0; for(var i=0;i<4;i++) for(var j=i+1;j<4;j++) mx=Math.max(mx,d2(t[i],t[j])); return mx<0.09; }
+function tipsToThumb(lm){ return d2(lm[I4],lm[T4])<0.09&&d2(lm[M4],lm[T4])<0.12&&d2(lm[R4],lm[T4])<0.12&&d2(lm[P4],lm[T4])<0.13; }
 
-function palmCrossZ(lm) {
-  var ax=lm[I1].x-lm[LW].x, ay=lm[I1].y-lm[LW].y;
-  var bx=lm[P1].x-lm[LW].x, by=lm[P1].y-lm[LW].y;
-  return ax*by - ay*bx;
-}
-
-function palmCrossY(lm) {
-  var ax=lm[I1].x-lm[LW].x, az=(lm[I1].z||0)-(lm[LW].z||0);
-  var bx=lm[P1].x-lm[LW].x, bz=(lm[P1].z||0)-(lm[LW].z||0);
-  return az*bx - ax*bz;
-}
-
-function palmCrossX(lm) {
-  var ay=lm[I1].y-lm[LW].y, az=(lm[I1].z||0)-(lm[LW].z||0);
-  var by=lm[P1].y-lm[LW].y, bz=(lm[P1].z||0)-(lm[LW].z||0);
-  return ay*bz - az*by;
-}
-
-function palmFwd(lm)  { return palmCrossZ(lm) < 0; }
-function palmDown(lm) { return palmCrossY(lm) > 0; }
-function palmSide(lm) { return palmCrossX(lm) < -0.12; }
-function palmUp(lm)   { return palmCrossY(lm) < -0.04; }
-function palmIn(lm) {
-  var pz = palmCrossZ(lm), px = palmCrossX(lm);
-  return pz > 0.05 && Math.abs(px) < Math.abs(pz) * 0.8;
-}
-
-function ti(lm){ return d2(lm[T4],lm[I4]) < 0.07; }
-function tm(lm){ return d2(lm[T4],lm[M4]) < 0.07; }
-function tr(lm){ return d2(lm[T4],lm[R4]) < 0.07; }
-function tp(lm){ return d2(lm[T4],lm[P4]) < 0.07; }
-function im(lm){ return d2(lm[I4],lm[M4]) < 0.058; }
-
-function indexHooked(lm) {
-  var a = angle3(lm[I1],lm[I2],lm[I4]);
-  return a < 135 && a > 45;
-}
-
-function gathered(lm) {
-  var tips=[lm[I4],lm[M4],lm[R4],lm[P4]], mx=0;
-  for(var i=0;i<4;i++) for(var j=i+1;j<4;j++) mx=Math.max(mx,d2(tips[i],tips[j]));
-  return mx < 0.09;
-}
-
-function tipsToThumb(lm) {
-  return d2(lm[I4],lm[T4])<0.09 && d2(lm[M4],lm[T4])<0.12 &&
-         d2(lm[R4],lm[T4])<0.12 && d2(lm[P4],lm[T4])<0.13;
-}
-
-function classify(lm) {
-  var e = ext(lm);
-  var T=e.t, I=e.i, M=e.m, R=e.r, P=e.p;
-  var isFwd  = palmFwd(lm);
-  var isDn   = palmDown(lm);
-  var isSide = palmSide(lm);
-  var isUp   = palmUp(lm);
-  var isIn   = palmIn(lm);
-
-  if (T && I && !M && !R && P) return 'I LOVE YOU';
-  if (T && !I && !M && !R && !P) return 'HELP';
-
-  if (T && I && M && R && P) {
-    var spread = d2(lm[I4],lm[P4]);
-    if (isDn && !isFwd)            return 'GOOD';
-    if (isSide)                    return 'MOTHER';
-    if (isFwd && spread > 0.18)    return 'HELLO';
-    if (isFwd && spread <= 0.18)   return '5';
+/* Classifier — unchanged from original */
+function classify(lm){
+  var e=ext(lm),T=e.t,I=e.i,M=e.m,R=e.r,P=e.p;
+  var isFwd=palmFwd(lm),isDn=palmDown(lm),isSide=palmSide(lm),isUp=palmUp(lm),isIn=palmIn(lm);
+  if(T&&I&&!M&&!R&&P) return 'I LOVE YOU';
+  if(T&&!I&&!M&&!R&&!P) return 'HELP';
+  if(T&&I&&M&&R&&P){
+    var sp=d2(lm[I4],lm[P4]);
+    if(isDn&&!isFwd) return 'GOOD';
+    if(isSide) return 'MOTHER';
+    if(isFwd&&sp>0.18) return 'HELLO';
+    if(isFwd&&sp<=0.18) return '5';
     return null;
   }
-
-  if (!T && !I && !M && !R && !P) {
-    if (tipsToThumb(lm)) {
-      if (isFwd) return '0';
-      return 'EAT';
-    }
-    if (isFwd) return 'YES';
+  if(!T&&!I&&!M&&!R&&!P){
+    if(tipsToThumb(lm)){ if(isFwd) return '0'; return 'EAT'; }
+    if(isFwd) return 'YES';
     return 'SORRY';
   }
-
-  if (!T && I && M && R && P) {
-    if (isDn && isFwd)  return 'THANK YOU';
-    if (isDn)           return 'THANK YOU';
-    if (isSide)         return 'STOP';
-    if (isUp)           return 'WANT';
-    if (isIn)           return 'PLEASE';
-    if (isFwd)          return '4';
+  if(!T&&I&&M&&R&&P){
+    if(isDn) return 'THANK YOU';
+    if(isSide) return 'STOP';
+    if(isUp) return 'WANT';
+    if(isIn) return 'PLEASE';
+    if(isFwd) return '4';
     return null;
   }
-
-  if (!T && gathered(lm) && (I || M || R || P)) return 'MORE';
-
-  if (!T && I && M && R && !P) {
-    if (d2(lm[I4],lm[M4]) > 0.055 && d2(lm[M4],lm[R4]) > 0.055) return 'WATER';
-  }
-
-  if (!T && I && M && !R && !P) {
-    if (im(lm) && isFwd && d2(lm[I4],lm[M4]) < 0.052) return 'NO';
-    if (isIn) return 'KNOW';
-    if (d2(lm[I4],lm[M4]) > 0.065 && isFwd) return '2';
-    if (!im(lm) && isFwd) return '2';
+  if(!T&&gathered(lm)&&(I||M||R||P)) return 'MORE';
+  if(!T&&I&&M&&R&&!P){ if(d2(lm[I4],lm[M4])>0.055&&d2(lm[M4],lm[R4])>0.055) return 'WATER'; }
+  if(!T&&I&&M&&!R&&!P){
+    if(im(lm)&&isFwd&&d2(lm[I4],lm[M4])<0.052) return 'NO';
+    if(isIn) return 'KNOW';
+    if(d2(lm[I4],lm[M4])>0.065&&isFwd) return '2';
+    if(!im(lm)&&isFwd) return '2';
     return null;
   }
-
-  if (!T && I && !M && !R && !P) {
-    var iy = lm[I4].y - lm[I1].y;
-    if (iy > 0.05) return 'NEED';
-    if (isSide && iy < -0.06) return 'THINK';
-    if (iy > -0.05) return 'YOU';
-    if (iy < -0.06 && isFwd) return '1';
+  if(!T&&I&&!M&&!R&&!P){
+    var iy=lm[I4].y-lm[I1].y;
+    if(iy>0.05) return 'NEED';
+    if(isSide&&iy<-0.06) return 'THINK';
+    if(iy>-0.05) return 'YOU';
+    if(iy<-0.06&&isFwd) return '1';
     return null;
   }
-
-  if (!T && !M && !R && !P && indexHooked(lm)) return 'FRIEND';
-
-  if (ti(lm) && !M && !R && !P) return '9';
-  if (T && I && M && !R && !P && !ti(lm) && !tm(lm)) return '3';
-  if (tp(lm) && I && M && R && !P) return '6';
-  if (tr(lm) && I && M && !R && P) return '7';
-
-  if (tm(lm) && I && !M && R && P) {
-    if (isIn || !isFwd) return 'LIKE';
-    return '8';
-  }
-
+  if(!T&&!M&&!R&&!P&&indexHooked(lm)) return 'FRIEND';
+  if(ti(lm)&&!M&&!R&&!P) return '9';
+  if(T&&I&&M&&!R&&!P&&!ti(lm)&&!tm(lm)) return '3';
+  if(tp(lm)&&I&&M&&R&&!P) return '6';
+  if(tr(lm)&&I&&M&&!R&&P) return '7';
+  if(tm(lm)&&I&&!M&&R&&P){ if(isIn||!isFwd) return 'LIKE'; return '8'; }
   return null;
 }
 
-
-var VOTE_N = 8;
-var voteQ  = [];
-
-function stableSign(sign) {
-  voteQ.push(sign);
-  if (voteQ.length > VOTE_N) voteQ.shift();
-  var counts = {};
-  voteQ.forEach(function(s){ if (s) counts[s] = (counts[s]||0)+1; });
-  var best=null, top=0;
-  Object.keys(counts).forEach(function(s){
-    if (counts[s]>top){ top=counts[s]; best=s; }
-  });
-  return (top >= Math.ceil(VOTE_N * 0.62)) ? best : null;
+/* Vote / Stability — improved: VOTE_N=10, threshold=0.65 */
+var VOTE_N = 10, voteQ = [], voteTop = 0;
+function stableSign(sign){
+  voteQ.push(sign); if(voteQ.length>VOTE_N) voteQ.shift();
+  var counts={}, best=null, top=0;
+  voteQ.forEach(function(s){ if(s) counts[s]=(counts[s]||0)+1; });
+  Object.keys(counts).forEach(function(s){ if(counts[s]>top){ top=counts[s]; best=s; } });
+  voteTop=top;
+  return (top>=Math.ceil(VOTE_N*0.65)) ? best : null;
 }
 
-var HOLD_MS  = 600;
-var lastSign = null, holdStart = 0, dispSign = null, ratio = 0;
+/* Hold state */
+var HOLD_MS=650, lastSign=null, holdStart=0, dispSign=null, ratio=0;
 
+/* Raw history bar */
 var hist = [];
-
-function addHist(sign) {
-  if (hist.length && hist[hist.length-1] === sign) return;
-  hist.push(sign);
-  if (hist.length > 30) hist.shift();
-  renderHist();
+function addHist(sign){
+  hist.push(sign); if(hist.length>40) hist.shift(); renderHist();
 }
-
-function renderHist() {
+function renderHist(){
   historyBar.querySelectorAll('.history-word').forEach(function(el){ el.remove(); });
   hist.forEach(function(w){
-    var s = document.createElement('span');
-    s.className = 'history-word';
-    s.textContent = w;
+    var s=document.createElement('span'); s.className='history-word'; s.textContent=w;
     historyBar.insertBefore(s, clearBtn);
   });
-  historyBar.scrollLeft = historyBar.scrollWidth;
+  historyBar.scrollLeft=historyBar.scrollWidth;
 }
 
-clearBtn.addEventListener('click', function(){
-  hist = [];
-  renderHist();
-  dispSign = null;
-  signLabel.textContent = '';
-  signLabel.style.opacity = '0';
-  confidenceBar.style.width = '0%';
+/* =========================================================
+   SENTENCE BUILDER
+   ========================================================= */
+var SENTENCE_PAUSE_MS     = 1500;
+var DUPLICATE_COOLDOWN_MS = 1200;
+
+var confirmedWords    = [];
+var transcript        = [];
+var lastConfirmedTime = 0;
+var lastConfirmedSign = null;
+var pauseTimer        = null;
+var showRawSigns      = true;
+var llmModeEnabled    = false;
+var customPhrases     = [];
+
+/* Phrase Pattern DB */
+var PHRASE_PATTERNS = [
+  /* 3-sign */
+  {signs:['I LOVE YOU','MOTHER'],       sentence:'I love you, mother.',       intent:'AFFECTION'},
+  {signs:['FRIEND','WANT','WATER'],     sentence:'My friend wants water.',    intent:'REQUEST_WATER'},
+  {signs:['MOTHER','NEED','HELP'],      sentence:'My mother needs help.',     intent:'REQUEST_HELP'},
+  {signs:['YOU','WANT','WATER'],        sentence:'Do you want water?',        intent:'QUESTION'},
+  {signs:['WANT','WATER','PLEASE'],     sentence:'I want water, please.',     intent:'REQUEST_WATER'},
+  {signs:['WANT','EAT','PLEASE'],       sentence:'I want to eat, please.',    intent:'REQUEST_FOOD'},
+  {signs:['NEED','MORE','WATER'],       sentence:'I need more water.',        intent:'REQUEST_WATER'},
+  {signs:['YOU','WANT','HELP'],         sentence:'Do you need help?',         intent:'QUESTION'},
+  /* 2-sign */
+  {signs:['MOTHER','HELP'],             sentence:'My mother needs help.',     intent:'REQUEST_HELP'},
+  {signs:['PLEASE','HELP'],             sentence:'Please help me.',           intent:'REQUEST_HELP'},
+  {signs:['HELP','PLEASE'],             sentence:'Please help me.',           intent:'REQUEST_HELP'},
+  {signs:['NEED','HELP'],               sentence:'I need help.',              intent:'REQUEST_HELP'},
+  {signs:['WANT','HELP'],               sentence:'I want help.',              intent:'REQUEST_HELP'},
+  {signs:['YOU','HELP'],                sentence:'Can you help me?',          intent:'REQUEST_HELP'},
+  {signs:['NO','WANT'],                 sentence:'I do not want that.',       intent:'NEGATION'},
+  {signs:['NO','STOP'],                 sentence:'Please do not stop.',       intent:'NEGATION'},
+  {signs:['PLEASE','STOP'],             sentence:'Please stop.',              intent:'GENERAL'},
+  {signs:['WANT','WATER'],              sentence:'I want water.',             intent:'REQUEST_WATER'},
+  {signs:['NEED','WATER'],              sentence:'I need water.',             intent:'REQUEST_WATER'},
+  {signs:['MORE','WATER'],              sentence:'I want more water.',        intent:'REQUEST_WATER'},
+  {signs:['LIKE','WATER'],              sentence:'I like water.',             intent:'GENERAL'},
+  {signs:['WANT','EAT'],                sentence:'I want to eat.',            intent:'REQUEST_FOOD'},
+  {signs:['NEED','EAT'],                sentence:'I need to eat.',            intent:'REQUEST_FOOD'},
+  {signs:['MORE','EAT'],                sentence:'I want more food.',         intent:'REQUEST_FOOD'},
+  {signs:['WANT','MORE'],               sentence:'I want more.',              intent:'WANT'},
+  {signs:['NEED','MORE'],               sentence:'I need more.',              intent:'NEED'},
+  {signs:['YOU','WANT'],                sentence:'Do you want something?',    intent:'QUESTION'},
+  {signs:['YOU','KNOW'],                sentence:'Do you know?',              intent:'QUESTION'},
+  {signs:['YOU','LIKE'],                sentence:'Do you like it?',           intent:'QUESTION'},
+  {signs:['FRIEND','HELP'],             sentence:'My friend needs help.',     intent:'REQUEST_HELP'},
+  {signs:['MOTHER','WANT'],             sentence:'My mother wants something.',intent:'WANT'},
+  {signs:['THINK','GOOD'],              sentence:'I think that is good.',     intent:'AFFIRMATION'},
+  /* 1-sign */
+  {signs:['I LOVE YOU'],  sentence:'I love you.',         intent:'AFFECTION'},
+  {signs:['THANK YOU'],   sentence:'Thank you.',          intent:'GRATITUDE'},
+  {signs:['YES'],         sentence:'Yes.',                intent:'AFFIRMATION'},
+  {signs:['NO'],          sentence:'No.',                 intent:'NEGATION'},
+  {signs:['SORRY'],       sentence:'I\'m sorry.',         intent:'APOLOGY'},
+  {signs:['HELLO'],       sentence:'Hello!',              intent:'GREETING'},
+  {signs:['HELP'],        sentence:'I need help.',        intent:'REQUEST_HELP'},
+  {signs:['GOOD'],        sentence:'Good.',               intent:'AFFIRMATION'},
+  {signs:['MORE'],        sentence:'I want more.',        intent:'WANT'},
+  {signs:['STOP'],        sentence:'Please stop.',        intent:'GENERAL'},
+  {signs:['EAT'],         sentence:'I want to eat.',      intent:'REQUEST_FOOD'},
+  {signs:['KNOW'],        sentence:'I know.',             intent:'GENERAL'},
+  {signs:['THINK'],       sentence:'I think so.',         intent:'GENERAL'},
+  {signs:['LIKE'],        sentence:'I like it.',          intent:'GENERAL'},
+  {signs:['NEED'],        sentence:'I need something.',   intent:'NEED'},
+  {signs:['WANT'],        sentence:'I want something.',   intent:'WANT'},
+  {signs:['WATER'],       sentence:'Water, please.',      intent:'REQUEST_WATER'},
+  {signs:['PLEASE'],      sentence:'Please.',             intent:'GENERAL'},
+  {signs:['MOTHER'],      sentence:'My mother.',          intent:'GENERAL'},
+  {signs:['FRIEND'],      sentence:'My friend.',          intent:'GENERAL'},
+  {signs:['YOU'],         sentence:'You.',                intent:'GENERAL'}
+];
+
+/* Intent scoring */
+var INTENT_WEIGHTS = {
+  REQUEST_HELP:  {'HELP':3,'PLEASE':1,'NEED':1.5,'MOTHER':0.5,'FRIEND':0.5,'YOU':0.5},
+  REQUEST_WATER: {'WATER':3,'WANT':1,'MORE':0.5,'NEED':1,'PLEASE':0.5},
+  REQUEST_FOOD:  {'EAT':3,'WANT':1,'MORE':0.5,'NEED':1,'PLEASE':0.5},
+  AFFIRMATION:   {'YES':3,'GOOD':2,'LIKE':1,'KNOW':0.5},
+  NEGATION:      {'NO':3,'STOP':1},
+  APOLOGY:       {'SORRY':3},
+  GRATITUDE:     {'THANK YOU':3},
+  GREETING:      {'HELLO':3},
+  AFFECTION:     {'I LOVE YOU':4,'LIKE':1,'FRIEND':0.5},
+  NEED:          {'NEED':3,'WANT':0.5},
+  WANT:          {'WANT':3,'MORE':1,'LIKE':0.5},
+  QUESTION:      {'YOU':2,'WANT':0.5,'KNOW':0.5,'LIKE':0.5}
+};
+
+function scoreIntent(signs){
+  var scores={}, best='GENERAL', top=0, total=0;
+  Object.keys(INTENT_WEIGHTS).forEach(function(k){ scores[k]=0; });
+  signs.forEach(function(sign){
+    Object.keys(INTENT_WEIGHTS).forEach(function(intent){
+      if(INTENT_WEIGHTS[intent][sign]) scores[intent]+=INTENT_WEIGHTS[intent][sign];
+    });
+  });
+  Object.keys(scores).forEach(function(k){
+    total+=scores[k]; if(scores[k]>top){ top=scores[k]; best=k; }
+  });
+  return { intent:best, confidence: total>0 ? Math.min(1,(top/total)*1.8) : 0 };
+}
+
+/* Pattern matching */
+function arraysMatch(a,b){
+  if(a.length!==b.length) return false;
+  for(var i=0;i<a.length;i++) if(a[i]!==b[i]) return false;
+  return true;
+}
+function isSubsequence(pattern,signs){
+  var pi=0;
+  for(var si=0;si<signs.length&&pi<pattern.length;si++) if(signs[si]===pattern[pi]) pi++;
+  return pi===pattern.length;
+}
+
+/* Grammar fallback */
+function generateByGrammar(signs){
+  var sc=scoreIntent(signs), idx={};
+  signs.forEach(function(s){ idx[s]=true; });
+  var hasYou=!!idx['YOU'], hasWant=!!idx['WANT'], hasNeed=!!idx['NEED'];
+  var hasMother=!!idx['MOTHER'], hasFriend=!!idx['FRIEND'];
+  var hasPlease=!!idx['PLEASE'], hasNo=!!idx['NO'];
+  var hasLike=!!idx['LIKE'], hasKnow=!!idx['KNOW'], hasThink=!!idx['THINK'];
+
+  var objects=signs.filter(function(s){
+    return ['WATER','EAT','HELP','MORE','STOP'].indexOf(s)!==-1;
+  }).map(function(s){ return s==='EAT'?'food':s.toLowerCase(); });
+
+  var subject=hasYou?'You':(hasMother?'My mother':(hasFriend?'My friend':'I'));
+  var isThird=(subject==='My mother'||subject==='My friend');
+  var isQ=hasYou&&(hasWant||hasNeed||hasLike||hasKnow);
+  var sentence='';
+
+  if(isQ){
+    var qv=hasWant?'want':(hasNeed?'need':(hasLike?'like':(hasKnow?'know':'want')));
+    sentence='Do you '+qv+(objects.length?' '+objects.join(' and '):'')+' ?';
+  } else {
+    var neg=hasNo?' do not':'';
+    var v=hasWant?'want':(hasNeed?'need':(hasLike?'like':(hasKnow?'know':(hasThink?'think':null))));
+    if(v){
+      var vs=isThird?v+'s':v;
+      sentence=subject+neg+' '+vs+(objects.length?' '+objects.join(' and '):'')+(hasPlease?', please':'')+'.';
+    } else if(objects.length){
+      sentence=subject+(isThird?' needs':' need')+' '+objects.join(' and ')+(hasPlease?', please':'')+'.';
+    } else {
+      sentence=signs.map(function(s){ return s.toLowerCase(); }).join(' ')+'.';
+    }
+  }
+  return { sentence:formatSentence(sentence), intent:sc.intent, confidence:sc.confidence*0.55 };
+}
+
+function formatSentence(text){
+  text=text.trim().replace(/\s+/g,' ').replace(/\s([?.!])/g,'$1');
+  if(!text) return '';
+  text=text.charAt(0).toUpperCase()+text.slice(1);
+  if(!/[.!?]$/.test(text)) text+='.';
+  return text;
+}
+
+/* Main interpreter */
+function interpretSignsToSentence(signs){
+  if(!signs||!signs.length) return null;
+  var i, sorted;
+  for(i=0;i<customPhrases.length;i++){
+    if(arraysMatch(customPhrases[i].signs,signs))
+      return { sentence:customPhrases[i].sentence, intent:'CUSTOM', confidence:1.0 };
+  }
+  sorted=PHRASE_PATTERNS.slice().sort(function(a,b){ return b.signs.length-a.signs.length; });
+  for(i=0;i<sorted.length;i++){
+    if(arraysMatch(sorted[i].signs,signs))
+      return { sentence:sorted[i].sentence, intent:sorted[i].intent, confidence:0.95 };
+  }
+  for(i=0;i<sorted.length;i++){
+    if(sorted[i].signs.length>=2&&isSubsequence(sorted[i].signs,signs))
+      return { sentence:sorted[i].sentence, intent:sorted[i].intent, confidence:0.72 };
+  }
+  return generateByGrammar(signs);
+}
+
+/* LLM mode */
+function getLLMEndpoint(){ return document.getElementById('llm-endpoint-input').value.trim(); }
+function getLLMModel()   { return document.getElementById('llm-model-input').value.trim()||'llama3'; }
+
+function interpretViaLLM(signs, callback){
+  var prompt='Convert these ASL sign glosses into one short natural English sentence. Do not add extra meaning. Reply with only the sentence.\nRaw signs: '+signs.join(' ');
+  var ctrl=new AbortController();
+  var to=setTimeout(function(){ ctrl.abort(); },3500);
+  fetch(getLLMEndpoint(),{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:getLLMModel(),prompt:prompt,stream:false,options:{temperature:0.3,num_predict:60}}),
+    signal:ctrl.signal
+  }).then(function(r){ clearTimeout(to); return r.json(); })
+    .then(function(d){
+      var s=(d.response||'').trim();
+      if(!s) throw new Error('empty');
+      callback({sentence:formatSentence(s),intent:'LLM',confidence:0.9});
+    })
+    .catch(function(){ clearTimeout(to); callback(interpretSignsToSentence(signs)); });
+}
+
+/* Sentence state */
+var INTENT_LABELS = {
+  REQUEST_HELP:'Request Help', REQUEST_WATER:'Request Water', REQUEST_FOOD:'Request Food',
+  AFFIRMATION:'Affirmation', NEGATION:'Negation', APOLOGY:'Apology',
+  GRATITUDE:'Gratitude', GREETING:'Greeting', AFFECTION:'Affection',
+  NEED:'Need', WANT:'Want', QUESTION:'Question',
+  GENERAL:'Statement', CUSTOM:'Custom', LLM:'AI'
+};
+
+function addConfirmedSign(sign){
+  var now=Date.now();
+  if(sign===lastConfirmedSign&&(now-lastConfirmedTime)<DUPLICATE_COOLDOWN_MS) return;
+  lastConfirmedSign=sign; lastConfirmedTime=now;
+  confirmedWords.push(sign); if(confirmedWords.length>20) confirmedWords.shift();
+  addHist(sign);
+  updateLiveSentence();
+  resetPauseTimer();
+}
+
+function resetPauseTimer(){
+  if(pauseTimer) clearTimeout(pauseTimer);
+  pauseIndicator.textContent='';
+  pauseTimer=setTimeout(function(){
+    if(confirmedWords.length>0) finalizeCurrentSentence();
+  }, SENTENCE_PAUSE_MS);
+}
+
+function updateLiveSentence(){
+  if(!confirmedWords.length){ setSentenceDisplay(null); return; }
+  if(llmModeEnabled){
+    interpretViaLLM(confirmedWords.slice(), setSentenceDisplay);
+  } else {
+    setSentenceDisplay(interpretSignsToSentence(confirmedWords.slice()));
+  }
+}
+
+function setSentenceDisplay(result){
+  if(!result){
+    sentenceText.textContent='Waiting for signs…';
+    sentenceText.classList.remove('has-sentence','pop');
+    intentLabel.textContent=''; intentConf.textContent='';
+    rawSignsPills.innerHTML=''; return;
+  }
+  sentenceText.textContent=result.sentence;
+  sentenceText.classList.add('has-sentence');
+  sentenceText.classList.remove('pop');
+  void sentenceText.offsetWidth;
+  sentenceText.classList.add('pop');
+  intentLabel.textContent=INTENT_LABELS[result.intent]||result.intent||'';
+  intentConf.textContent=Math.round((result.confidence||0)*100)+'%';
+  if(debugOverlay.classList.contains('visible'))
+    dbgIntent.textContent=(INTENT_LABELS[result.intent]||result.intent||'—');
+  renderRawPills();
+}
+
+function renderRawPills(){
+  rawSignsPills.innerHTML='';
+  confirmedWords.forEach(function(w){
+    var s=document.createElement('span'); s.className='raw-pill'; s.textContent=w;
+    rawSignsPills.appendChild(s);
+  });
+}
+
+function removeLastSign(){
+  if(!confirmedWords.length) return;
+  confirmedWords.pop();
+  if(hist.length){ hist.pop(); renderHist(); }
+  updateLiveSentence();
+}
+
+function clearCurrentSentence(){
+  confirmedWords=[]; lastConfirmedSign=null;
+  if(pauseTimer){ clearTimeout(pauseTimer); pauseTimer=null; }
+  pauseIndicator.textContent='';
+  setSentenceDisplay(null);
+}
+
+function finalizeCurrentSentence(){
+  if(!confirmedWords.length) return;
+  var result=interpretSignsToSentence(confirmedWords.slice());
+  if(result){
+    transcript.push({
+      sentence:result.sentence, intent:result.intent,
+      time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
+    });
+    renderTranscript();
+    showToast('Added to transcript');
+  }
+  clearCurrentSentence();
+}
+
+function copySentence(){
+  var text=sentenceText.textContent;
+  if(!text||text==='Waiting for signs…') return;
+  copyToClipboard(text); showToast('Copied!');
+}
+function copyTranscriptAll(){
+  var text=transcript.map(function(t,i){ return (i+1)+'. '+t.sentence; }).join('\n');
+  if(text){ copyToClipboard(text); showToast('Transcript copied!'); }
+}
+function copyToClipboard(text){
+  if(navigator.clipboard){ navigator.clipboard.writeText(text).catch(function(){ legacyCopy(text); }); }
+  else legacyCopy(text);
+}
+function legacyCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text; ta.style.cssText='position:fixed;opacity:0';
+  document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+
+/* Transcript */
+function renderTranscript(){
+  transcriptList.innerHTML='';
+  if(!transcript.length){
+    var p=document.createElement('p'); p.className='t-empty';
+    p.textContent='No sentences yet'; transcriptList.appendChild(p); return;
+  }
+  transcript.forEach(function(item,i){
+    var d=document.createElement('div'); d.className='transcript-item';
+    d.innerHTML='<span class="t-num">'+(i+1)+'</span><span class="t-sentence">'+item.sentence+'</span><span class="t-time">'+item.time+'</span>';
+    transcriptList.appendChild(d);
+  });
+  transcriptList.scrollTop=transcriptList.scrollHeight;
+}
+
+/* Custom phrases */
+function loadCustomPhrases(){
+  try{ customPhrases=JSON.parse(localStorage.getItem('asl_custom_phrases')||'[]'); }
+  catch(e){ customPhrases=[]; }
+  renderCustomPhrases();
+}
+function saveCustomPhrases(){
+  try{ localStorage.setItem('asl_custom_phrases',JSON.stringify(customPhrases)); } catch(e){}
+  renderCustomPhrases();
+}
+function renderCustomPhrases(){
+  var list=document.getElementById('custom-phrase-list'); if(!list) return;
+  list.innerHTML='';
+  if(!customPhrases.length){
+    list.innerHTML='<p style="color:rgba(255,255,255,0.22);font-size:0.7rem;margin-bottom:8px">No custom phrases</p>';
+    return;
+  }
+  customPhrases.forEach(function(cp,i){
+    var d=document.createElement('div'); d.className='cp-item';
+    d.innerHTML='<span class="cp-signs">'+cp.signs.join(' › ')+'</span><span class="cp-arrow">→</span><span class="cp-sentence">'+cp.sentence+'</span><button class="cp-del" data-i="'+i+'">×</button>';
+    list.appendChild(d);
+  });
+  list.querySelectorAll('.cp-del').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      customPhrases.splice(+btn.dataset.i,1); saveCustomPhrases();
+    });
+  });
+}
+
+/* Toast */
+var toastTimer=null;
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.style.opacity='1';
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ t.style.opacity='0'; },1800);
+}
+
+/* Button wiring */
+document.getElementById('undo-btn').addEventListener('click', removeLastSign);
+document.getElementById('copy-btn').addEventListener('click', copySentence);
+document.getElementById('finalize-btn').addEventListener('click', finalizeCurrentSentence);
+document.getElementById('clear-sentence-btn').addEventListener('click', clearCurrentSentence);
+document.getElementById('copy-transcript-btn').addEventListener('click', copyTranscriptAll);
+document.getElementById('clear-transcript-btn').addEventListener('click',function(){
+  transcript=[]; renderTranscript();
+});
+document.getElementById('toggle-raw-btn').addEventListener('click',function(){
+  showRawSigns=!showRawSigns;
+  rawSignsRow.classList.toggle('hidden',!showRawSigns);
+  this.textContent=showRawSigns?'Hide':'Show';
+});
+clearBtn.addEventListener('click',function(){
+  hist=[]; renderHist();
+  clearCurrentSentence();
+  dispSign=null; lastSign=null; ratio=0; voteQ=[];
+  signLabel.textContent=''; signLabel.style.opacity='0';
+  confidenceBar.style.width='0%'; holdRing.textContent='';
+});
+document.getElementById('ref-toggle').addEventListener('click',function(){
+  refPanel.classList.toggle('open'); transcriptPanel.classList.remove('open');
+});
+document.getElementById('transcript-toggle').addEventListener('click',function(){
+  transcriptPanel.classList.toggle('open'); refPanel.classList.remove('open');
+});
+document.getElementById('debug-toggle').addEventListener('click',function(){
+  debugOverlay.classList.toggle('visible'); this.classList.toggle('active');
 });
 
-var busy = false;
+function setLLMMode(on){
+  llmModeEnabled=on;
+  document.getElementById('smart-mode-btn').textContent=on?'AI ●':'AI ○';
+  document.getElementById('smart-mode-btn').classList.toggle('active',on);
+  document.getElementById('llm-toggle-btn').textContent=on?'On':'Off';
+  document.getElementById('llm-toggle-btn').classList.toggle('on',on);
+  document.getElementById('llm-status').textContent=on?'Enabled – sending to local LLM':'Disabled – rule-based interpretation active';
+}
+document.getElementById('smart-mode-btn').addEventListener('click',function(){
+  setLLMMode(!llmModeEnabled); showToast(llmModeEnabled?'AI mode on':'Rule-based mode');
+});
+document.getElementById('llm-toggle-btn').addEventListener('click',function(){ setLLMMode(!llmModeEnabled); });
 
-var hands = new Hands({
-  locateFile: function(f){ return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/'+f; }
+document.getElementById('add-phrase-btn').addEventListener('click',function(){
+  var signsRaw=document.getElementById('cp-signs-input').value.trim();
+  var sentence=document.getElementById('cp-sentence-input').value.trim();
+  if(!signsRaw||!sentence){ showToast('Fill in both fields'); return; }
+  var signs=signsRaw.split(/\s*,\s*/).map(function(s){ return s.trim().toUpperCase(); }).filter(Boolean);
+  if(!signs.length){ showToast('Enter at least one sign'); return; }
+  customPhrases.push({signs:signs,sentence:sentence});
+  saveCustomPhrases();
+  document.getElementById('cp-signs-input').value='';
+  document.getElementById('cp-sentence-input').value='';
+  showToast('Custom phrase saved!');
 });
 
-hands.setOptions({
-  maxNumHands: 1,
-  modelComplexity: 1,
-  minDetectionConfidence: 0.75,
-  minTrackingConfidence: 0.65
-});
+/* MediaPipe */
+var busy=false;
+var hands=new Hands({ locateFile:function(f){ return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/'+f; } });
+hands.setOptions({ maxNumHands:1, modelComplexity:1, minDetectionConfidence:0.75, minTrackingConfidence:0.65 });
 
-hands.onResults(function(results) {
-  busy = false;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+hands.onResults(function(results){
+  busy=false;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  var dbgActive=debugOverlay.classList.contains('visible');
 
-  if (!results.multiHandLandmarks || !results.multiHandLandmarks.length) {
-    smLm = null; lastSign = null; ratio = 0; voteQ = [];
-    signLabel.style.opacity = '0';
-    confidenceBar.style.width = '0%';
+  if(!results.multiHandLandmarks||!results.multiHandLandmarks.length){
+    smLm=null; lastSign=null; ratio=0; voteQ=[]; voteTop=0;
+    signLabel.style.opacity='0'; confidenceBar.style.width='0%'; holdRing.textContent='';
+    if(dbgActive){
+      dbgRaw.textContent='—'; dbgStable.textContent='—';
+      dbgHold.textContent='0%'; dbgVote.textContent='0/'+VOTE_N; dbgCd.textContent='—';
+    }
     return;
   }
 
-  var lm = smooth(results.multiHandLandmarks[0]);
+  var lm=smooth(results.multiHandLandmarks[0]);
+  drawConnectors(ctx,lm,HAND_CONNECTIONS,{color:'rgba(100,200,255,0.5)',lineWidth:2});
+  drawLandmarks(ctx,lm,{color:'rgba(255,255,255,0.9)',fillColor:'rgba(60,160,255,0.6)',lineWidth:1,radius:4});
 
-  drawConnectors(ctx, lm, HAND_CONNECTIONS, {color:'rgba(100,200,255,0.5)', lineWidth:2});
-  drawLandmarks(ctx, lm, {color:'rgba(255,255,255,0.9)', fillColor:'rgba(60,160,255,0.6)', lineWidth:1, radius:4});
+  var raw=classify(lm);
+  var stable=stableSign(raw);
+  var now=Date.now();
 
-  var raw    = classify(lm);
-  var stable = stableSign(raw);
-  var now    = Date.now();
+  if(dbgActive){
+    dbgRaw.textContent=raw||'—';
+    dbgStable.textContent=stable||'—';
+    dbgVote.textContent=voteTop+'/'+VOTE_N;
+    dbgBuf.textContent=confirmedWords.length+' word'+(confirmedWords.length!==1?'s':'');
+    var cdLeft=lastConfirmedSign?Math.max(0,DUPLICATE_COOLDOWN_MS-(now-lastConfirmedTime)):0;
+    dbgCd.textContent=cdLeft>0?(cdLeft+'ms'):'ready';
+  }
 
-  if (stable) {
-    if (stable !== lastSign) {
-      lastSign = stable; holdStart = now; ratio = 0;
-    } else {
-      var elapsed = now - holdStart;
-      ratio = Math.min(1, elapsed / HOLD_MS);
-      if (elapsed >= HOLD_MS && stable !== dispSign) {
-        dispSign = stable;
-        addHist(stable);
+  if(stable){
+    if(stable!==lastSign){ lastSign=stable; holdStart=now; ratio=0; }
+    else{
+      var elapsed=now-holdStart;
+      ratio=Math.min(1,elapsed/HOLD_MS);
+      if(elapsed>=HOLD_MS&&stable!==dispSign){
+        dispSign=stable;
+        addConfirmedSign(stable);
       }
     }
-    signLabel.textContent = stable;
-    signLabel.style.opacity = String(0.3 + ratio * 0.7);
-    confidenceBar.style.width = (ratio * 100) + '%';
+    signLabel.textContent=stable;
+    signLabel.style.opacity=String(0.3+ratio*0.7);
+    confidenceBar.style.width=(ratio*100)+'%';
+    holdRing.textContent=ratio<1?'Hold… '+Math.round(ratio*100)+'%':'';
+    if(dbgActive) dbgHold.textContent=Math.round(ratio*100)+'%';
   } else {
-    lastSign = null; ratio = 0; dispSign = null;
-    signLabel.style.opacity = '0';
-    confidenceBar.style.width = '0%';
+    lastSign=null; ratio=0; dispSign=null;
+    signLabel.style.opacity='0'; confidenceBar.style.width='0%'; holdRing.textContent='';
+    if(dbgActive) dbgHold.textContent='0%';
   }
 });
 
-function loop() {
-  if (!busy && video.readyState >= 2) {
-    busy = true;
-    hands.send({image: video}).catch(function(){ busy = false; });
-  }
+function loop(){
+  if(!busy&&video.readyState>=2){ busy=true; hands.send({image:video}).catch(function(){ busy=false; }); }
   requestAnimationFrame(loop);
 }
 
 hands.initialize().then(function(){
-  statusEl.textContent = 'Camera starting...';
-  return navigator.mediaDevices.getUserMedia({
-    video: {width:{ideal:1280}, height:{ideal:720}, facingMode:'user'}
-  });
+  statusEl.textContent='Camera starting…';
+  return navigator.mediaDevices.getUserMedia({ video:{width:{ideal:1280},height:{ideal:720},facingMode:'user'} });
 }).then(function(stream){
-  video.srcObject = stream;
-  return video.play();
+  video.srcObject=stream; return video.play();
 }).then(function(){
-  statusEl.textContent = 'Ready';
+  statusEl.textContent='Ready';
+  loadCustomPhrases();
+  renderTranscript();
   requestAnimationFrame(loop);
 }).catch(function(err){
-  statusEl.textContent = 'Error: ' + err.message;
+  statusEl.textContent='Error: '+err.message;
 });
 
 })();
