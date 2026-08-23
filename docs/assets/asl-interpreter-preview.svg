@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
   <title id="title">ASL Interpreter interface preview</title>
-  <desc id="desc">A dark webcam-style interface with hand landmarks, a detected sign, sentence builder, transcript, and supported signs panel.</desc>
+  <desc id="desc">A dark webcam-style interface with hand landmarks, a detected sign, and sentence builder.</desc>
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
       <stop offset="0" stop-color="#05070d"/>
@@ -53,17 +53,6 @@
   <text x="835" y="596" fill="#93c5fd" font-family="Segoe UI, Arial" font-size="16">Copy</text>
   <rect x="938" y="574" width="136" height="32" rx="8" fill="#111827" stroke="#334155"/>
   <text x="957" y="596" fill="#cbd5e1" font-family="Segoe UI, Arial" font-size="16">Finalize</text>
-  <rect x="870" y="48" width="242" height="410" rx="18" fill="#07111f" stroke="#26364f"/>
-  <text x="898" y="86" fill="#e2e8f0" font-family="Segoe UI, Arial" font-size="22" font-weight="700">Supported Signs</text>
-  <g font-family="Segoe UI, Arial" font-size="16">
-    <rect x="898" y="116" width="72" height="42" rx="9" fill="#111827"/><text x="920" y="143" fill="#f8fafc">YES</text>
-    <rect x="982" y="116" width="72" height="42" rx="9" fill="#111827"/><text x="1008" y="143" fill="#f8fafc">NO</text>
-    <rect x="898" y="172" width="156" height="42" rx="9" fill="#111827"/><text x="919" y="199" fill="#f8fafc">THANK YOU</text>
-    <rect x="898" y="228" width="94" height="42" rx="9" fill="#111827"/><text x="919" y="255" fill="#f8fafc">HELP</text>
-    <rect x="1006" y="228" width="72" height="42" rx="9" fill="#111827"/><text x="1024" y="255" fill="#f8fafc">EAT</text>
-    <rect x="898" y="284" width="86" height="42" rx="9" fill="#111827"/><text x="916" y="311" fill="#f8fafc">WANT</text>
-    <rect x="996" y="284" width="92" height="42" rx="9" fill="#111827"/><text x="1016" y="311" fill="#f8fafc">WATER</text>
-  </g>
   <rect x="70" y="48" width="218" height="48" rx="12" fill="#07111f" stroke="#26364f"/>
   <circle cx="96" cy="72" r="7" fill="#22c55e"/>
   <text x="116" y="79" fill="#cbd5e1" font-family="Segoe UI, Arial" font-size="17">Camera ready</text>
