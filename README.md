@@ -4,8 +4,6 @@
 
 ASL Interpreter uses webcam hand tracking, geometric gesture heuristics, a vote-based stability filter, and a tested sentence-building engine to turn recognized ASL glosses into natural English output. It runs locally in the browser by default: no backend, no account, and no cloud API required.
 
-![ASL Interpreter interface preview](docs/assets/asl-interpreter-preview.svg)
-
 ## What It Does
 
 - Detects one hand in real time with MediaPipe Hands.
