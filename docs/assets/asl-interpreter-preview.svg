@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">ASL Interpreter interface preview</title>
+  <desc id="desc">A dark webcam-style interface with hand landmarks, a detected sign, sentence builder, transcript, and supported signs panel.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#05070d"/>
+      <stop offset="1" stop-color="#101827"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="1">
+      <stop offset="0" stop-color="#111827" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#0f172a" stop-opacity=".88"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <rect x="20" y="20" width="1160" height="680" rx="28" fill="#020617" stroke="#26364f"/>
+  <circle cx="356" cy="258" r="126" fill="#0b1220" stroke="#2b415e" stroke-width="2"/>
+  <g stroke="#63c7ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <path d="M318 354 L334 286 L340 214 L332 152"/>
+    <path d="M344 288 L380 230 L400 166"/>
+    <path d="M352 297 L424 268 L498 238"/>
+    <path d="M348 320 L430 330 L514 336"/>
+    <path d="M335 342 L400 392 L462 448"/>
+  </g>
+  <g fill="#e8f7ff" stroke="#89dfff" stroke-width="3">
+    <circle cx="318" cy="354" r="12"/>
+    <circle cx="334" cy="286" r="10"/>
+    <circle cx="340" cy="214" r="10"/>
+    <circle cx="332" cy="152" r="10"/>
+    <circle cx="380" cy="230" r="10"/>
+    <circle cx="400" cy="166" r="10"/>
+    <circle cx="424" cy="268" r="10"/>
+    <circle cx="498" cy="238" r="10"/>
+    <circle cx="430" cy="330" r="10"/>
+    <circle cx="514" cy="336" r="10"/>
+    <circle cx="400" cy="392" r="10"/>
+    <circle cx="462" cy="448" r="10"/>
+  </g>
+  <text x="600" y="178" fill="#f8fafc" font-family="Segoe UI, Arial" font-size="86" font-weight="800">THANK YOU</text>
+  <rect x="607" y="210" width="242" height="10" rx="5" fill="#1e293b"/>
+  <rect x="607" y="210" width="204" height="10" rx="5" fill="#38bdf8"/>
+  <text x="607" y="254" fill="#94a3b8" font-family="Segoe UI, Arial" font-size="23">Hold 84% · stable vote 8/10</text>
+  <rect x="70" y="544" width="1060" height="110" rx="18" fill="url(#panel)" stroke="#26364f"/>
+  <text x="104" y="582" fill="#64748b" font-family="Segoe UI, Arial" font-size="17" letter-spacing="3">CURRENT SENTENCE</text>
+  <text x="104" y="626" fill="#f8fafc" font-family="Segoe UI, Arial" font-size="38" font-weight="700">Thank you.</text>
+  <rect x="816" y="574" width="108" height="32" rx="8" fill="#10243d" stroke="#2563eb"/>
+  <text x="835" y="596" fill="#93c5fd" font-family="Segoe UI, Arial" font-size="16">Copy</text>
+  <rect x="938" y="574" width="136" height="32" rx="8" fill="#111827" stroke="#334155"/>
+  <text x="957" y="596" fill="#cbd5e1" font-family="Segoe UI, Arial" font-size="16">Finalize</text>
+  <rect x="870" y="48" width="242" height="410" rx="18" fill="#07111f" stroke="#26364f"/>
+  <text x="898" y="86" fill="#e2e8f0" font-family="Segoe UI, Arial" font-size="22" font-weight="700">Supported Signs</text>
+  <g font-family="Segoe UI, Arial" font-size="16">
+    <rect x="898" y="116" width="72" height="42" rx="9" fill="#111827"/><text x="920" y="143" fill="#f8fafc">YES</text>
+    <rect x="982" y="116" width="72" height="42" rx="9" fill="#111827"/><text x="1008" y="143" fill="#f8fafc">NO</text>
+    <rect x="898" y="172" width="156" height="42" rx="9" fill="#111827"/><text x="919" y="199" fill="#f8fafc">THANK YOU</text>
+    <rect x="898" y="228" width="94" height="42" rx="9" fill="#111827"/><text x="919" y="255" fill="#f8fafc">HELP</text>
+    <rect x="1006" y="228" width="72" height="42" rx="9" fill="#111827"/><text x="1024" y="255" fill="#f8fafc">EAT</text>
+    <rect x="898" y="284" width="86" height="42" rx="9" fill="#111827"/><text x="916" y="311" fill="#f8fafc">WANT</text>
+    <rect x="996" y="284" width="92" height="42" rx="9" fill="#111827"/><text x="1016" y="311" fill="#f8fafc">WATER</text>
+  </g>
+  <rect x="70" y="48" width="218" height="48" rx="12" fill="#07111f" stroke="#26364f"/>
+  <circle cx="96" cy="72" r="7" fill="#22c55e"/>
+  <text x="116" y="79" fill="#cbd5e1" font-family="Segoe UI, Arial" font-size="17">Camera ready</text>
+</svg>

@@ -1,0 +1,10 @@
+{
+  "name": "asl-interpreter",
+  "version": "2.1.0",
+  "private": true,
+  "description": "Browser-based ASL gesture interpreter with tested sentence-building logic.",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {}
+}

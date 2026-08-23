@@ -382,10 +382,13 @@ body { background: #000; color: #fff; font-family: 'Segoe UI', system-ui, sans-s
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+<script src="src/asl-core.js"></script>
 
 <script>
 (function () {
 'use strict';
+
+var ASLCore = window.ASLCore;
 
 /* DOM */
 var video          = document.getElementById('video');
@@ -746,22 +749,7 @@ function formatSentence(text){
 
 /* Main interpreter */
 function interpretSignsToSentence(signs){
-  if(!signs||!signs.length) return null;
-  var i, sorted;
-  for(i=0;i<customPhrases.length;i++){
-    if(arraysMatch(customPhrases[i].signs,signs))
-      return { sentence:customPhrases[i].sentence, intent:'CUSTOM', confidence:1.0 };
-  }
-  sorted=PHRASE_PATTERNS.slice().sort(function(a,b){ return b.signs.length-a.signs.length; });
-  for(i=0;i<sorted.length;i++){
-    if(arraysMatch(sorted[i].signs,signs))
-      return { sentence:sorted[i].sentence, intent:sorted[i].intent, confidence:0.95 };
-  }
-  for(i=0;i<sorted.length;i++){
-    if(sorted[i].signs.length>=2&&isSubsequence(sorted[i].signs,signs))
-      return { sentence:sorted[i].sentence, intent:sorted[i].intent, confidence:0.72 };
-  }
-  return generateByGrammar(signs);
+  return ASLCore.interpretSignsToSentence(signs, customPhrases);
 }
 
 /* LLM mode */
@@ -905,7 +893,7 @@ function renderTranscript(){
   }
   transcript.forEach(function(item,i){
     var d=document.createElement('div'); d.className='transcript-item';
-    d.innerHTML='<span class="t-num">'+(i+1)+'</span><span class="t-sentence">'+item.sentence+'</span><span class="t-time">'+item.time+'</span>';
+    d.innerHTML='<span class="t-num">'+(i+1)+'</span><span class="t-sentence">'+ASLCore.escapeHTML(item.sentence)+'</span><span class="t-time">'+ASLCore.escapeHTML(item.time)+'</span>';
     transcriptList.appendChild(d);
   });
   transcriptList.scrollTop=transcriptList.scrollHeight;
@@ -930,7 +918,7 @@ function renderCustomPhrases(){
   }
   customPhrases.forEach(function(cp,i){
     var d=document.createElement('div'); d.className='cp-item';
-    d.innerHTML='<span class="cp-signs">'+cp.signs.join(' › ')+'</span><span class="cp-arrow">→</span><span class="cp-sentence">'+cp.sentence+'</span><button class="cp-del" data-i="'+i+'">×</button>';
+    d.innerHTML='<span class="cp-signs">'+ASLCore.escapeHTML(cp.signs.join(' › '))+'</span><span class="cp-arrow">→</span><span class="cp-sentence">'+ASLCore.escapeHTML(cp.sentence)+'</span><button class="cp-del" data-i="'+i+'">×</button>';
     list.appendChild(d);
   });
   list.querySelectorAll('.cp-del').forEach(function(btn){
@@ -997,9 +985,14 @@ document.getElementById('add-phrase-btn').addEventListener('click',function(){
   var signsRaw=document.getElementById('cp-signs-input').value.trim();
   var sentence=document.getElementById('cp-sentence-input').value.trim();
   if(!signsRaw||!sentence){ showToast('Fill in both fields'); return; }
-  var signs=signsRaw.split(/\s*,\s*/).map(function(s){ return s.trim().toUpperCase(); }).filter(Boolean);
-  if(!signs.length){ showToast('Enter at least one sign'); return; }
-  customPhrases.push({signs:signs,sentence:sentence});
+  var phrase;
+  try {
+    phrase = ASLCore.normalizeCustomPhrase(signsRaw, sentence);
+  } catch (err) {
+    showToast(err.message);
+    return;
+  }
+  customPhrases.push(phrase);
   saveCustomPhrases();
   document.getElementById('cp-signs-input').value='';
   document.getElementById('cp-sentence-input').value='';
